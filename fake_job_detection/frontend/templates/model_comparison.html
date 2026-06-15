@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Comparison — JobShield</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root{--em:#10B981;--tl:#0EA5A4;--lime:#A3E635;--dk:#0C1F1A;--dk2:#0F2A22;--mint:#F4FBF8;--ink:#0B1A16;--soft:#45554F;--line:#E6EFEB}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--mint);line-height:1.6;padding-bottom:40px}
+h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;letter-spacing:-.02em;line-height:1.15}
+.wrap{width:92%;max-width:1080px;margin:0 auto}
+.head{background:radial-gradient(700px 360px at 75% -10%,rgba(16,185,129,.35),transparent 60%),linear-gradient(160deg,var(--dk),var(--dk2));color:#eafff7;padding:46px 0 40px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:'Space Grotesk';font-weight:600;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#b9ffe6;background:rgba(255,255,255,.08);padding:6px 14px;border-radius:100px;margin-bottom:14px}
+.eyebrow::before{content:"\2726";color:var(--lime)}
+.head h1{color:#fff;font-size:38px}
+.head h1 span{background:linear-gradient(100deg,#34e3a8,#22d3c4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.head p{color:#c4ded4;margin-top:10px}
+.back{display:inline-block;color:#b9ffe6;font-size:14px;text-decoration:none;margin-bottom:14px}
+.best-banner{background:radial-gradient(500px 200px at 90% -30%,rgba(163,230,53,.18),transparent),linear-gradient(135deg,var(--dk),var(--dk2));color:#eafff7;border-radius:24px;padding:30px;margin:-26px auto 26px;box-shadow:0 18px 40px rgba(11,26,22,.12)}
+.best-banner .tag{display:inline-block;background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:600;padding:5px 13px;border-radius:100px}
+.best-banner h2{color:#fff;font-size:26px;margin-top:10px}
+.best-banner p{color:#c4ded4;font-size:14px}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:22px}
+.bgrid .n{font-family:'Space Grotesk';font-size:30px;font-weight:700;color:#fff}
+.bgrid .t{color:#c4ded4;font-size:13px}
+.sec-title{text-align:center;margin:34px 0 22px}
+.sec-title h2{font-size:26px}
+.sec-title h2 span{background:linear-gradient(100deg,#10B981,#0EA5A4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:26px}
+.card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 20px rgba(11,26,22,.05)}
+.card.best{border:2px solid var(--em);box-shadow:0 16px 36px rgba(16,185,129,.18)}
+.card .best-tag{position:absolute;top:-11px;right:16px;background:var(--em);color:#042f22;font-size:11px;font-weight:700;padding:4px 13px;border-radius:100px}
+.card h3{font-size:18px;margin-bottom:3px}
+.card .d{color:var(--soft);font-size:12px;margin-bottom:14px;min-height:32px}
+.mrow{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.mrow .v{font-weight:600}
+.track{background:var(--line);border-radius:100px;height:12px;overflow:hidden;margin-bottom:10px}
+.fill{height:100%;border-radius:100px;width:0;transition:width 1s ease;background:linear-gradient(90deg,var(--tl),var(--em))}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 20px rgba(11,26,22,.05);padding:22px;margin-bottom:22px}
+.ptitle{font-family:'Space Grotesk';font-size:18px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--mint);text-align:left;padding:12px;font-family:'Space Grotesk';font-weight:600}
+td{padding:12px;border-bottom:1px solid var(--line)}
+.badge{display:inline-block;padding:4px 11px;border-radius:100px;font-size:11px;font-weight:600;background:#e7f9f1;color:#10B981}
+.empty{background:#fff4e5;border:1px solid #F59E0B;color:#92600a;padding:16px;border-radius:12px;font-size:14px}
+.legend{font-size:13px;color:var(--soft);line-height:1.9}.legend b{color:var(--ink)}
+@media(max-width:760px){.cards,.bgrid{grid-template-columns:1fr 1fr}.head h1{font-size:30px}}
+@media(max-width:520px){.cards,.bgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="wrap">
+    <a href="{{ url_for('dashboard') }}" class="back">&larr; Back to Dashboard</a>
+    <div><span class="eyebrow">Model Performance</span></div>
+    <h1>Algorithm <span>Comparison</span></h1>
+    <p>Accuracy, precision, recall and F1 score for each model we tested.</p>
+  </div>
+</div>
+
+<div class="wrap">
+{% if model_data and model_data.models %}
+  {% set best = model_data.models[0] %}
+
+  <div class="best-banner">
+    <span class="tag">Best Performing Model</span>
+    <h2>{{ best.name }}</h2>
+    <p>{{ best.description }}</p>
+    <div class="bgrid">
+      <div><div class="n">{{ best.test_accuracy }}%</div><div class="t">Accuracy</div></div>
+      <div><div class="n">{{ best.precision }}%</div><div class="t">Precision</div></div>
+      <div><div class="n">{{ best.recall }}%</div><div class="t">Recall</div></div>
+      <div><div class="n">{{ best.f1 }}%</div><div class="t">F1 Score</div></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><h2>Side-by-side <span>cards</span></h2></div>
+  <div class="cards">
+    {% for m in model_data.models %}
+    <div class="card {% if loop.first %}best{% endif %}">
+      {% if loop.first %}<span class="best-tag">Best</span>{% endif %}
+      <h3>{{ m.name }}</h3>
+      <p class="d">{{ m.description }}</p>
+      <div class="mrow"><span>Accuracy</span><span class="v">{{ m.test_accuracy }}%</span></div>
+      <div class="track"><div class="fill" style="width: {{ m.test_accuracy }}%;"></div></div>
+      <div class="mrow"><span>Precision</span><span class="v">{{ m.precision }}%</span></div>
+      <div class="track"><div class="fill" style="width: {{ m.precision }}%;"></div></div>
+      <div class="mrow"><span>Recall</span><span class="v">{{ m.recall }}%</span></div>
+      <div class="track"><div class="fill" style="width: {{ m.recall }}%;"></div></div>
+      <div class="mrow"><span>F1 Score</span><span class="v">{{ m.f1 }}%</span></div>
+      <div class="track"><div class="fill" style="width: {{ m.f1 }}%;"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">Comparison Table</div>
+    <div style="overflow-x:auto">
+      <table>
+        <tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>CV Accuracy</th></tr>
+        {% for m in model_data.models %}
+        <tr {% if loop.first %}style="background:#e7f9f1"{% endif %}>
+          <td style="font-weight:600">{{ m.name }}{% if loop.first %} <span class="badge">Best</span>{% endif %}</td>
+          <td>{{ m.test_accuracy }}%</td><td>{{ m.precision }}%</td><td>{{ m.recall }}%</td><td>{{ m.f1 }}%</td><td>{{ m.cv_accuracy }}%</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="ptitle">What the metrics mean</div>
+    <div class="legend">
+      <b>Accuracy</b> — how many predictions were correct overall.<br>
+      <b>Precision</b> — of the jobs predicted Fake, how many were truly fake.<br>
+      <b>Recall</b> — of all truly fake jobs, how many the model caught.<br>
+      <b>F1 Score</b> — a balance between precision and recall.
+    </div>
+  </div>
+
+{% else %}
+  <div class="empty">
+    No model results found. Add a file at <strong>model/model_results.json</strong>
+    with your accuracy, precision, recall and F1 numbers, then refresh this page.
+  </div>
+{% endif %}
+</div>
+
+</body>
+</html>

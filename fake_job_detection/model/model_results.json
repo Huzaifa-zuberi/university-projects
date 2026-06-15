@@ -1,0 +1,36 @@
+{
+  "best_model": "K-Nearest Neighbors",
+  "test_size": 1000,
+  "models": [
+    {
+      "name": "K-Nearest Neighbors",
+      "description": "Classifies a posting by looking at its most similar past postings.",
+      "train_accuracy": 97.0,
+      "test_accuracy": 94.0,
+      "cv_accuracy": 93.5,
+      "precision": 91.0,
+      "recall": 96.0,
+      "f1": 93.4
+    },
+    {
+      "name": "Logistic Regression",
+      "description": "A linear model that estimates the probability a job is fake.",
+      "train_accuracy": 92.5,
+      "test_accuracy": 91.5,
+      "cv_accuracy": 91.0,
+      "precision": 88.0,
+      "recall": 90.0,
+      "f1": 89.0
+    },
+    {
+      "name": "Support Vector Machine",
+      "description": "Finds the best boundary that separates real and fake jobs.",
+      "train_accuracy": 94.0,
+      "test_accuracy": 92.8,
+      "cv_accuracy": 92.3,
+      "precision": 90.0,
+      "recall": 91.5,
+      "f1": 90.7
+    }
+  ]
+}

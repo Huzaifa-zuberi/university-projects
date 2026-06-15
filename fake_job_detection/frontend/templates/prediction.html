@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result — JobShield</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{{ url_for('dashboard') }}" class="brand"><img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo"><b>Job<span>Shield</span></b></a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('job_form') }}">Check Job</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="phead"><div class="wrap"><h1>Detailed Analysis Report</h1><p>Here is what our model found about this job posting.</p></div></div>
+
+    <div class="wrap" style="padding: 34px 0;">
+
+        <div id="statusBanner" class="verdict">
+            <h2 id="statusText">—</h2>
+            <p id="statusSub">Prediction result for this job posting</p>
+            <div style="margin-top:10px;"><span id="riskBadge" class="badge" style="background:rgba(255,255,255,0.2);color:#fff;font-size:14px;">Risk: —</span></div>
+        </div>
+
+        <div class="grid2 mb">
+            <div class="panel">
+                <div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg> Fake Job Probability</div>
+                <div class="meter"><div class="top"><span class="l">Chance of being fake</span><span class="v" id="fakeValue">0%</span></div><div class="track"><div class="fill red" id="fakeBar"></div></div></div>
+            </div>
+            <div class="panel">
+                <div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Confidence Percentage</div>
+                <div class="meter"><div class="top"><span class="l">Model confidence</span><span class="v" id="confValue">0%</span></div><div class="track"><div class="fill" id="confBar"></div></div></div>
+            </div>
+        </div>
+
+        <div class="grid3 mb">
+            <div class="panel"><div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg> Reasons Behind Prediction</div><ul class="rlist l-reason" id="reasonsList"></ul></div>
+            <div class="panel"><div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg> Warning Indicators</div><ul class="rlist l-warn" id="warningsList"></ul></div>
+            <div class="panel"><div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg> Safety Suggestions</div><ul class="rlist l-tip" id="suggestionsList"></ul></div>
+        </div>
+
+        <div class="panel">
+            <div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Posting Details Checked</div>
+            <div class="tablewrap"><table id="reportTable"><tbody></tbody></table></div>
+            <a href="{{ url_for('job_form') }}" class="btn btn-primary mt">Check Another Job</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-ghost mt">Back to Dashboard</a>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

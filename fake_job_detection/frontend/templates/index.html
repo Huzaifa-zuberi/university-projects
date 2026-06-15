@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShield — Fake Job Detection in Pakistan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== FLOATING NAVBAR ===== -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{{ url_for('home') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo">
+                <b>Job<span>Shield</span></b>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                {% if logged_in %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <header class="hero">
+        <span class="eyebrow">AI-Powered Job Verification</span>
+        <h1>Know if a job is <span class="grad-text">real or a scam</span> in seconds</h1>
+        <p>Paste any job posting and let our machine learning model flag the red flags,
+           score the risk, and tell you how safe it really is.</p>
+        <div>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Start Checking Free</a>
+            <a href="{{ url_for('about') }}" class="btn btn-light">How it Works</a>
+        </div>
+        <div class="hero-chips">
+            <div class="chip"><div class="n">3</div><div class="t">ML Models</div></div>
+            <div class="chip"><div class="n">8</div><div class="t">Fields Analysed</div></div>
+            <div class="chip"><div class="n">5</div><div class="t">Safety Checks</div></div>
+            <div class="chip"><div class="n">24/7</div><div class="t">Available</div></div>
+        </div>
+    </header>
+
+    <!-- ===== FEATURES (numbered bento) ===== -->
+    <section class="sec">
+        <div class="wrap">
+            <div class="sec-head">
+                <span class="eyebrow">Why JobShield</span>
+                <h2>Everything you need to <span class="grad-text">verify a job</span></h2>
+                <p>Clear, practical protection built for job seekers in Pakistan.</p>
+            </div>
+            <div class="bento">
+                <div class="fcard"><div class="fnum">01</div>
+                    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg></div>
+                    <h3>Instant Detection</h3><p>Get a Real or Fake verdict for any posting immediately.</p>
+                </div>
+                <div class="fcard"><div class="fnum">02</div>
+                    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+                    <h3>Risk Scoring</h3><p>See fake probability and confidence with a clear risk level.</p>
+                </div>
+                <div class="fcard"><div class="fnum">03</div>
+                    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div>
+                    <h3>Warning Signs</h3><p>Spot the exact red flags hidden in the posting.</p>
+                </div>
+                <div class="fcard"><div class="fnum">04</div>
+                    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+                    <h3>Safety Tips</h3><p>Simple advice to protect yourself while applying.</p>
+                </div>
+                <div class="fcard"><div class="fnum">05</div>
+                    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+                    <h3>History</h3><p>Every check is saved so you can review it later.</p>
+                </div>
+                <div class="fcard"><div class="fnum">06</div>
+                    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="14" y="6" width="3" height="11"/></svg></div>
+                    <h3>Model Insights</h3><p>Compare the ML models powering the detection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MARQUEE of scam phrases ===== -->
+    <div class="marquee">
+        <div class="track">
+            <span class="pill">Registration fee</span><span class="pill">Send CNIC</span><span class="pill">Earn fast money</span>
+            <span class="pill">No experience needed</span><span class="pill">Work from home & earn</span><span class="pill">Urgent joining</span>
+            <span class="pill">Bank account details</span><span class="pill">EasyPaisa deposit</span><span class="pill">Guaranteed job</span>
+            <span class="pill">Registration fee</span><span class="pill">Send CNIC</span><span class="pill">Earn fast money</span>
+            <span class="pill">No experience needed</span><span class="pill">Work from home & earn</span><span class="pill">Urgent joining</span>
+            <span class="pill">Bank account details</span><span class="pill">EasyPaisa deposit</span><span class="pill">Guaranteed job</span>
+        </div>
+    </div>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="sec sec-mint">
+        <div class="wrap">
+            <div class="split">
+                <div>
+                    <span class="eyebrow">How it Works</span>
+                    <h2>From posting to <span class="grad-text">verdict</span> in 3 steps</h2>
+                    <ul class="ticks">
+                        <li>Paste the job details into a simple form.</li>
+                        <li>Our trained model reads the wording and scores it.</li>
+                        <li>You get a clear report with risk, reasons and tips.</li>
+                    </ul>
+                    <a href="{{ url_for('register') }}" class="btn btn-primary mt">Try it Now</a>
+                </div>
+                <div class="note-box">
+                    <h3>For guidance only</h3>
+                    <p>JobShield is an academic awareness tool. A "Real" result does not
+                       guarantee a job is genuine — always stay cautious, never pay any fee,
+                       and verify the company through official channels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== STATS ===== -->
+    <section class="sec">
+        <div class="wrap">
+            <div class="statbar">
+                <div class="s"><div class="n">3</div><div class="t">ML Models Compared</div></div>
+                <div class="s"><div class="n">8</div><div class="t">Job Details Read</div></div>
+                <div class="s"><div class="n">5</div><div class="t">Safety Checks</div></div>
+                <div class="s"><div class="n">100%</div><div class="t">Free to Use</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="sec" style="padding-top:0;">
+        <div class="wrap">
+            <div class="cta">
+                <h2>Don't get trapped by a fake job</h2>
+                <p>Create a free account and verify your next offer in seconds.</p>
+                <a href="{{ url_for('register') }}" class="btn btn-dark">Create Free Account</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="wrap">
+            <div class="grid">
+                <div>
+                    <div class="brand"><img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo" style="height:32px;"><b>Job<span style="color:var(--emerald)">Shield</span></b></div>
+                    <p style="font-size:14px;max-width:320px;margin-top:12px;">An academic project that detects fake job postings in Pakistan using machine learning.</p>
+                </div>
+                <div><h4>Links</h4><ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                </ul></div>
+                <div><h4>Stay Safe</h4><ul>
+                    <li>Never pay job fees</li><li>Verify the company</li><li>Protect your data</li>
+                </ul></div>
+            </div>
+            <div class="copy">© 2025 JobShield — Fake Job Detection. Academic Project.</div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

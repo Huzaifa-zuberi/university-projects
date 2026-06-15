@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — JobShield</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{{ url_for('home') }}" class="brand"><img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo"><b>Job<span>Shield</span></b></a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}" class="active">About</a></li>
+                {% if logged_in %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="phead"><div class="wrap"><h1>About This Project</h1><p>Fighting online job fraud in Pakistan with machine learning.</p></div></div>
+
+    <section class="sec">
+        <div class="wrap">
+            <div class="split">
+                <div>
+                    <span class="eyebrow">Project Overview</span>
+                    <h2>Detecting <span class="grad-text">fake job postings</span></h2>
+                    <p>JobShield is an academic project that predicts whether a job advertisement is
+                       genuine or a scam. It studies the wording of the posting using a trained
+                       machine learning model and gives a clear, easy-to-understand result.</p>
+                    <ul class="ticks">
+                        <li>Built with HTML, CSS, JavaScript and Flask.</li>
+                        <li>Machine learning powered by Scikit-Learn (TF-IDF + classifier).</li>
+                        <li>Compares Logistic Regression, KNN, and SVM.</li>
+                        <li>Records stored in PostgreSQL (Supabase).</li>
+                    </ul>
+                </div>
+                <div class="note-box">
+                    <h3>Important notice</h3>
+                    <p>This is an awareness and learning tool. A "Real" result does not guarantee a job
+                       is genuine. Always stay cautious, never pay fees, and verify the company through
+                       official channels before sharing any personal details.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sec sec-mint">
+        <div class="wrap">
+            <div class="sec-head"><span class="eyebrow">What You Get</span><h2>Your report <span class="grad-text">includes</span></h2></div>
+            <div class="bento">
+                <div class="fcard"><div class="fnum">01</div><h3>Result & Risk Level</h3><p>Real or Fake, with Low / Medium / High risk.</p></div>
+                <div class="fcard"><div class="fnum">02</div><h3>Probability & Confidence</h3><p>Clear percentages you can trust and explain.</p></div>
+                <div class="fcard"><div class="fnum">03</div><h3>Warnings & Safety Tips</h3><p>Red flags found, plus advice to stay safe.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer"><div class="wrap"><div class="copy">© 2025 JobShield — Fake Job Detection. Academic Project.</div></div></footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

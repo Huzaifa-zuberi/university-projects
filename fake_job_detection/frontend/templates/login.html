@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — JobShield</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="auth">
+        <div class="auth-card">
+            <div class="lg"><img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo"></div>
+            <h2>Welcome back</h2>
+            <p class="sub">Login to access your dashboard</p>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}{% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}{% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+                <div class="field"><label for="password">Password</label><input type="password" id="password" name="password" required></div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            <p class="switch">Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+        </div>
+    </div>
+</body>
+</html>

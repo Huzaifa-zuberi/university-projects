@@ -1,0 +1,11 @@
+# Python libraries needed for this project.
+# Install everything with:  pip install -r requirements.txt
+
+Flask==3.0.3
+psycopg2-binary==2.9.9
+scikit-learn==1.5.1
+pandas==2.2.2
+numpy==1.26.4
+seaborn==0.13.2
+matplotlib==3.9.2
+joblib==1.4.2

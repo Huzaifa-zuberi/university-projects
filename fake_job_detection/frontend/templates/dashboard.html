@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — JobShield</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo"><b>Job<span>Shield</span></b>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ url_for('job_form') }}">Check Job</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="wrap" style="padding: 40px 0;">
+
+        <!-- hello -->
+        <div class="hello">
+            <span class="eyebrow" style="color:#b9ffe6;background:rgba(255,255,255,0.08);">Dashboard</span>
+            <h2>Welcome, {{ user_name }}</h2>
+            <p>Your job checks and model performance at a glance.</p>
+            <a href="{{ url_for('job_form') }}" class="btn btn-primary mt">+ Check a Job</a>
+        </div>
+
+        <!-- KPI cards -->
+        <div class="grid3 mb">
+            <div class="panel kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div><div class="n">{{ stats.total }}</div><div class="t">Total Checks</div></div>
+            <div class="panel kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><div class="n">{{ stats.real }}</div><div class="t">Real Jobs</div></div>
+            <div class="panel kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></div><div class="n">{{ stats.fake }}</div><div class="t">Fake Jobs</div></div>
+        </div>
+
+        <!-- recent -->
+        <div class="panel mb">
+            <div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Recent Predictions</div>
+            {% if recent and recent|length > 0 %}
+                <div class="grid3">
+                    {% for r in recent %}
+                    <div class="panel" style="box-shadow:none;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+                            <strong style="font-size:15px;">{{ r.job_title[:22] }}</strong>
+                            {% if r.predicted_result == 'Fake' %}<span class="badge b-danger">Fake</span>{% else %}<span class="badge b-safe">Real</span>{% endif %}
+                        </div>
+                        <p style="color:var(--ink-soft);font-size:13px;margin-top:6px;">{{ r.company_name or 'Unknown company' }}</p>
+                        <p style="font-size:13px;margin-top:8px;">Risk:
+                            {% if r.risk_level == 'High' %}<span class="badge b-danger">High</span>
+                            {% elif r.risk_level == 'Medium' %}<span class="badge b-warn">Medium</span>
+                            {% else %}<span class="badge b-safe">Low</span>{% endif %}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty">No checks yet. Click <strong>Check a Job</strong> to start.</div>
+            {% endif %}
+        </div>
+
+        <!-- MODEL PERFORMANCE DASHBOARD -->
+        <div class="sec-head" style="margin:30px auto 24px;">
+            <span class="eyebrow">Model Performance Dashboard</span>
+            <h2 style="font-size:30px;">Which model detects fake jobs <span class="grad-text">best?</span></h2>
+        </div>
+
+        {% if model_data %}
+            {% set best = model_data.models[0] %}
+            <div class="hello" style="background:radial-gradient(500px 200px at 90% -30%, rgba(163,230,53,0.18), transparent), linear-gradient(135deg,#0C1F1A,#0F2A22);">
+                <span class="badge" style="background:rgba(255,255,255,0.16);color:#fff;">Best Performing Model</span>
+                <h2 style="margin-top:10px;">{{ best.name }}</h2>
+                <p>{{ best.description }}</p>
+                <div class="grid4 mt">
+                    <div><div class="n" style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:#fff;">{{ best.test_accuracy }}%</div><div style="color:#c4ded4;font-size:13px;">Accuracy</div></div>
+                    <div><div class="n" style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:#fff;">{{ best.precision }}%</div><div style="color:#c4ded4;font-size:13px;">Precision</div></div>
+                    <div><div class="n" style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:#fff;">{{ best.recall }}%</div><div style="color:#c4ded4;font-size:13px;">Recall</div></div>
+                    <div><div class="n" style="font-family:'Space Grotesk';font-size:32px;font-weight:700;color:#fff;">{{ best.f1 }}%</div><div style="color:#c4ded4;font-size:13px;">F1 Score</div></div>
+                </div>
+            </div>
+
+            <div class="grid3 mb">
+                {% for m in model_data.models %}
+                <div class="panel mcard {% if loop.first %}best{% endif %}">
+                    {% if loop.first %}<span class="best-tag">Best</span>{% endif %}
+                    <h3>{{ m.name }}</h3>
+                    <p class="d">{{ m.description }}</p>
+                    <div class="mrow"><span>Accuracy</span><span class="v">{{ m.test_accuracy }}%</span></div>
+                    <div class="track" style="margin-bottom:10px;"><div class="fill" style="width: {{ m.test_accuracy }}%;"></div></div>
+                    <div class="mrow"><span>Precision</span><span class="v">{{ m.precision }}%</span></div>
+                    <div class="track" style="margin-bottom:10px;"><div class="fill" style="width: {{ m.precision }}%;"></div></div>
+                    <div class="mrow"><span>Recall</span><span class="v">{{ m.recall }}%</span></div>
+                    <div class="track" style="margin-bottom:10px;"><div class="fill" style="width: {{ m.recall }}%;"></div></div>
+                    <div class="mrow"><span>F1 Score</span><span class="v">{{ m.f1 }}%</span></div>
+                    <div class="track"><div class="fill" style="width: {{ m.f1 }}%;"></div></div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="panel">
+                <div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg> Comparison Table</div>
+                <div class="tablewrap">
+                    <table>
+                        <thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>CV Accuracy</th></tr></thead>
+                        <tbody>
+                            {% for m in model_data.models %}
+                            <tr {% if loop.first %}style="background:#e7f9f1;"{% endif %}>
+                                <td style="font-weight:600;">{{ m.name }} {% if loop.first %}<span class="badge b-safe" style="margin-left:6px;">Best</span>{% endif %}</td>
+                                <td>{{ m.test_accuracy }}%</td><td>{{ m.precision }}%</td><td>{{ m.recall }}%</td><td>{{ m.f1 }}%</td><td>{{ m.cv_accuracy }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            <div class="panel"><div class="empty">Model performance will appear here after you run <strong>model_training.ipynb</strong> (it creates <strong>model_results.json</strong>).</div></div>
+        {% endif %}
+
+        <!-- history -->
+        <div class="panel mt">
+            <div class="ptitle"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> Prediction History</div>
+            {% if records and records|length > 0 %}
+            <div class="tablewrap">
+                <table>
+                    <thead><tr><th>#</th><th>Job Title</th><th>Company</th><th>Result</th><th>Fake %</th><th>Risk</th><th>Date</th></tr></thead>
+                    <tbody>
+                        {% for r in records %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ r.job_title }}</td>
+                            <td>{{ r.company_name or '—' }}</td>
+                            <td>{% if r.predicted_result == 'Fake' %}<span class="badge b-danger">Fake</span>{% else %}<span class="badge b-safe">Real</span>{% endif %}</td>
+                            <td>{{ r.fake_probability }}%</td>
+                            <td>{% if r.risk_level == 'High' %}<span class="badge b-danger">High</span>{% elif r.risk_level == 'Medium' %}<span class="badge b-warn">Medium</span>{% else %}<span class="badge b-safe">Low</span>{% endif %}</td>
+                            <td>{{ r.created_at.strftime('%d %b %Y') if r.created_at else '—' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}<div class="empty">No history yet.</div>{% endif %}
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
