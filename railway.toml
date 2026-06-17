@@ -2,6 +2,6 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "gunicorn backend.app:app"
+startCommand = "gunicorn fake_job_detection.backend.app:app"
 restartPolicyType = "on-failure"
 maxMissingPipelines = 5
