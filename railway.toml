@@ -2,4 +2,5 @@
 rootDirectory = "fake_job_detection"
 
 [deploy]
-startCommand = "gunicorn app:app"
+startCommand = "gunicorn --chdir backend app:app"
+restartPolicy = "on-failure"
