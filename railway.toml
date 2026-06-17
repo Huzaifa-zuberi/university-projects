@@ -1,0 +1,5 @@
+[build]
+rootDirectory = "fake_job_detection"
+
+[deploy]
+startCommand = "gunicorn app:app"
