@@ -1,5 +1,6 @@
 [build]
-builder = "nixpacks"
+rootDirectory = "fake_job_detection"
 
 [deploy]
-startCommand = "gunicorn backend.app:app"
+startCommand = "python -m gunicorn --bind 0.0.0.0:5000 backend.app:app"
+restartPolicy = "on-failure"
