@@ -1,5 +1,5 @@
 # ============================================================
-# app.py (FIXED FOR RENDER DEPLOYMENT)
+# app.py (OPTIMIZED FOR RAILWAY DEPLOYMENT)
 # ============================================================
 
 from flask import (
@@ -16,12 +16,15 @@ import model_utils
 
 
 # ------------------------------------------------------------
-# Flask App
+# Flask App (Railway Root-Path Check)
 # ------------------------------------------------------------
+# Using absolute paths prevents breaking if the root directory changes in Railway settings
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
 app = Flask(
     __name__,
-    template_folder="../frontend/templates",
-    static_folder="../frontend/static",
+    template_folder=os.path.join(base_dir, "../frontend/templates"),
+    static_folder=os.path.join(base_dir, "../frontend/static"),
 )
 
 app.secret_key = config.SECRET_KEY
@@ -36,7 +39,7 @@ def is_logged_in():
 
 def load_model_results():
     path = os.path.join(
-        os.path.dirname(__file__),
+        base_dir,
         "..",
         "model",
         "model_results.json"
@@ -49,17 +52,15 @@ def load_model_results():
 
 
 # ------------------------------------------------------------
-# ROUTES
+# ROUTES (Unchanged)
 # ------------------------------------------------------------
 @app.route("/")
 def home():
     return render_template("index.html", logged_in=is_logged_in())
 
-
 @app.route("/about")
 def about():
     return render_template("about.html", logged_in=is_logged_in())
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -75,7 +76,6 @@ def register():
             return redirect(url_for("login"))
 
     return render_template("register.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -94,13 +94,11 @@ def login():
 
     return render_template("login.html")
 
-
 @app.route("/logout")
 def logout():
     session.clear()
     flash("You have been logged out.")
     return redirect(url_for("login"))
-
 
 @app.route("/dashboard")
 def dashboard():
@@ -127,7 +125,6 @@ def dashboard():
         model_data=model_data,
     )
 
-
 @app.route("/job_form")
 def job_form():
     if not is_logged_in():
@@ -135,14 +132,12 @@ def job_form():
 
     return render_template("job_form.html", user_name=session.get("user_name"))
 
-
 @app.route("/prediction")
 def prediction():
     if not is_logged_in():
         return redirect(url_for("login"))
 
     return render_template("prediction.html", user_name=session.get("user_name"))
-
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -169,11 +164,9 @@ def predict():
         return jsonify({"error": "Job title and description required"}), 400
 
     result_data = model_utils.predict(data)
-
     database.save_prediction(session["user_id"], data, result_data)
 
     return jsonify(result_data)
-
 
 @app.route("/comparison")
 def comparison():
@@ -181,13 +174,13 @@ def comparison():
         return redirect(url_for("login"))
 
     model_data = load_model_results()
-
     return render_template("model_comparison.html", model_data=model_data)
 
 
 # ------------------------------------------------------------
-# RENDER ENTRY POINT (IMPORTANT FIX)
+# RAILWAY ENTRY POINT 
 # ------------------------------------------------------------
+# Defaulting port to 5000 or letting Gunicorn bypass this block entirely.
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
