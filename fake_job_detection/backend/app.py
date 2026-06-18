@@ -9,7 +9,16 @@ from flask import (
 import os
 import json
 
-import config
+import config# Force any NumPy float types to become standard Python floats
+clean_confidence = float(confidence[0]) 
+
+result_data = {
+    "prediction": prediction[0],
+    "confidence": clean_confidence
+}
+
+# Now this will save perfectly without confusing PostgreSQL!
+database.save_prediction(session["user_id"], data, result_data)
 import auth
 import database
 import model_utils
