@@ -67,6 +67,26 @@ def save_prediction(user_id, data, result):
     """
     conn = get_connection()
     cur = conn.cursor()
+
+    # Extract database elements and ensure scalar numeric values
+    pred_res = result.get("predicted_result")
+    
+    fake_prob = result.get("fake_probability", 0.0)
+    if hasattr(fake_prob, "item"):
+        fake_prob = fake_prob.item()
+
+    conf_pct = result.get("confidence_percentage", 0.0)
+    if hasattr(conf_pct, "item"):
+        conf_pct = conf_pct.item()
+
+    risk_lvl = result.get("risk_level")
+    
+    warning_signs = result.get("warning_signs", [])
+    if isinstance(warning_signs, list):
+        warning_signs_str = ", ".join(warning_signs)
+    else:
+        warning_signs_str = str(warning_signs)
+
     cur.execute(
         """
         INSERT INTO predictions (
@@ -87,11 +107,11 @@ def save_prediction(user_id, data, result):
             data.get("experience", ""),
             data.get("education", ""),
             data.get("description", ""),
-            result["predicted_result"],
-            result["fake_probability"],
-            result["confidence_percentage"],
-            result["risk_level"],
-            ", ".join(result["warning_signs"]),
+            pred_res,
+            fake_prob,
+            conf_pct,
+            risk_lvl,
+            warning_signs_str,
         ),
     )
     conn.commit()
